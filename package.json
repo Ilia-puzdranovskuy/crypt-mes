@@ -5,5 +5,8 @@
     "express": "^4.17.2",
     "generate-safe-id": "^1.0.3",
     "ws": "^8.5.0"
+  },
+  "scripts": {
+    "start": "node blockchain"
   }
 }
