@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "body-parse": "^0.1.0",
+    "crypto-js": "^4.1.1",
+    "express": "^4.17.2",
+    "generate-safe-id": "^1.0.3",
+    "ws": "^8.5.0"
+  }
+}
