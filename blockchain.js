@@ -435,11 +435,19 @@ server.on('connection', function(socket){
 });
 
 // --------------------------------------------------------------------
-/*
-var initHttpServer = () => {
+
+
 
     var app = express();
     app.use(bodyParser.json());
+
+    app.get('/', (req, res) => 
+        fs.readFile('cli.html',function (err, data){
+            res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
+            res.write(data);
+            res.end();
+        }) 
+    );
 
     app.get('/blocks', (req, res) => 
         res.send( GJson( blockchain ) +"\n") 
@@ -465,6 +473,6 @@ var initHttpServer = () => {
 
     app.listen(http_port, () => console.log('Listening http on port: ' + http_port));
 
-};
-*/
+
+
 // --------------------------------------------------------------------
