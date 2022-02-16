@@ -10,7 +10,7 @@ var bodyParser  = require('body-parser');
 var WebSocket   = require("ws");
 var genUUID     = require('generate-safe-id'); // var UUID = genUUID();
 
-var http_port    = process.env.HTTP_PORT || 3001;
+var PORT    = process.env.PORT || 5000
 var p2p_port     = process.env.P2P_PORT || 6001;
 var initialPeers = process.env.PEERS ? process.env.PEERS.split(',') : [];
 var fs           = require("fs");
@@ -471,7 +471,7 @@ server.on('connection', function(socket){
         res.send();
     });
 
-    app.listen(http_port, () => console.log('Listening http on port: ' + http_port));
+    app.listen(PORT, () => console.log('Listening http on port: ' + PORT));
 
 
 
