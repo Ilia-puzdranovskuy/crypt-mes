@@ -1,23 +1,21 @@
-// curl http://localhost:3001/blocks
-// curl -H "Content-type:application/json" --data '{"data" : "Some data to the first block"}' http://localhost:3001/mineBlock
-// curl -H "Content-type:application/json" --data '{"peer" : "ws://localhost:6001"}' http://localhost:3001/addPeer
-// curl http://localhost:3001/peers
+'use strict';
 
-// --------------------------------------------------------------------
+const express = require('express');
+const { Server } = require('ws');
 var CryptoJS    = require("crypto-js");
-var express     = require("express");
 var bodyParser  = require('body-parser');
-var WebSocket   = require("ws");
-var genUUID     = require('generate-safe-id'); // var UUID = genUUID();
-
-var PORT    = process.env.PORT || 5000
-var p2p_port     = process.env.P2P_PORT || 6001;
-var initialPeers = process.env.PEERS ? process.env.PEERS.split(',') : [];
+var genUUID     = require('generate-safe-id');
 var fs           = require("fs");
 
-// --------------------------------------------------------------------
+const PORT = process.env.PORT || 3000;
+const INDEX = '/cli.html';
 
-sockets = {};
+const server = express()
+  .use(bodyParser.json())
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+let sockets = {};
 
 function broadcast( socket, ownIncluded, data ){
 
@@ -28,7 +26,7 @@ function broadcast( socket, ownIncluded, data ){
     for (var sock_id in sockets ) {
         var sock = sockets[ sock_id ];
 
-        if ( sock.readyState == WebSocket.OPEN ){
+        if ( true/*sock.readyState == WebSocket.OPEN*/ ){
 
             if( ownIncluded ){
                 sock.send( data );
@@ -142,7 +140,7 @@ var Chain = {
 
         if( chain_len >= 3 ){
 
-            DEPTH = 0;
+            let DEPTH = 0;
 
             for (var i = (chain_len-1); i > (chain_len-1) - 3; i--) {
 
@@ -297,10 +295,11 @@ Chain.createBlock({
 
 // --------------------------------------------------------------------
 
-var server = new WebSocket.Server({port: p2p_port});
+//var server = new WebSocket.Server({port: p2p_port});
+const wss = new Server({ server });
 
-server.on('connection', function(socket){
-
+wss .on('connection', function(socket){
+    console.log("conect")
     // ------------------------------
     var UUID = genUUID();
     console.info( 'on.connection: UUID: ['+UUID+']' );
@@ -325,7 +324,7 @@ server.on('connection', function(socket){
 
                 // console.info( 'sock.readyState: ', sock.readyState );
 
-                if ( sock.readyState == WebSocket.OPEN ){
+                if ( true/*sock.readyState == WebSocket.OPEN*/ ){
 
                     console.info( 'send' );
 
@@ -353,7 +352,7 @@ server.on('connection', function(socket){
 
     // ------------------------------
     // [BLOCKCHAIN - EVENT - METHODS]
-    _BlockChain = {
+    let _BlockChain = {
 
         onGetBlockID : function( json_t ){
             return Chain.getBlockNum( json_t.block_id );
@@ -433,46 +432,3 @@ server.on('connection', function(socket){
     // ------------------------------
 
 });
-
-// --------------------------------------------------------------------
-
-
-
-    var app = express();
-    app.use(bodyParser.json());
-
-    app.get('/', (req, res) => 
-        fs.readFile('cli.html',function (err, data){
-            res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
-            res.write(data);
-            res.end();
-        }) 
-    );
-
-    app.get('/blocks', (req, res) => 
-        res.send( GJson( blockchain ) +"\n") 
-    );
-
-    app.post('/mineBlock', (req, res) => {
-        var newBlock = generateNextBlock(req.body.data);
-        addBlock(newBlock);
-        broadcast(responseLatestMsg());
-        console.log(' #CHAIN: block added: ' + GJson(newBlock) );
-        res.send();
-
-    });
-
-    app.get('/peers', (req, res) => {
-        res.send(sockets.map(s => s._socket.remoteAddress + ':' + s._socket.remotePort));
-    });
-
-    app.post('/addPeer', (req, res) => {
-        connectToPeers([req.body.peer]);
-        res.send();
-    });
-
-    app.listen(PORT, () => console.log('Listening http on port: ' + PORT));
-
-
-
-// --------------------------------------------------------------------

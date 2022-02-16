@@ -33,8 +33,10 @@
 
                 });
 
+                
                 // ----------------------------------------------------
-                var socket = new WebSocket( 'ws://127.0.0.1:6001' );
+                let HOST = location.origin.replace(/^http/, 'ws')
+                var socket = new WebSocket( HOST);
 
                 socket.onopen = function (e) {
                     console.log( 'socket.onopen: [true]' );
