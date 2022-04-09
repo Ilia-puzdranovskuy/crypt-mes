@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html labg="en-US">
+<head>
+
+    <title>BlockChain - Cli</title>
+    <meta charset="utf-8"/>
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="./json2.js"></script>
+
+    <script type="text/javascript">
+        window.addEventListener('load', function(){
+
+            (function(){
+    
+                // ----------------------------------------------------
+                var chatBody = getByID('chat-side-body-wrapper');
+                var input = getByID('input');
+
+                input.addEventListener('keyup', function(event){
+
+                    if( event.keyCode == 13 ){
+
+                        var data = this.value.trim();
+                        this.value = '';
+
+                        socketSend({
+                            method : 'onNewChatMessage',
+                            msg : data+'___'+'<%- userData.username%>',
+
+                        });
+
+                    }
+
+                });
+
+                
+                // ----------------------------------------------------
+                let HOST = location.origin.replace(/^http/, 'ws')
+                var socket = new WebSocket( HOST);
+
+                socket.onopen = function (e) {
+                    console.log( 'socket.onopen: [true]' );
+
+                    socketSend({
+                        method : 'onChatInit',
+
+                    });
+
+                };
+
+                socket.onmessage = function (e) {
+
+                    // console.log( 'onmessage: origin :', e.origin );
+                    console.log( 'onmessage: data   :', e.data );
+
+                    var json_t = JSON.parse( e.data );
+                    console.log( 'json_t:', json_t );
+
+                    if( typeof json_t.method !== "undefined" ){
+                        if( typeof Chat[ json_t.method ] === "function" ){
+                            Chat[ json_t.method ]( json_t );
+
+                        }else{ console.warn( ' ['+json_t.method+'] => IS NOT Chat method' ); }
+                    }else{ console.warn( 'NO method param available' ); }
+
+                };
+
+                socket.onclose = function (e) {
+                    console.log( 'onclose: wasClean:', e.wasClean );
+                    console.log( 'onclose: code:', e.code );
+                    console.log( 'onclose: reason:', e.reason );
+
+                };
+
+                socket.onerror = function (e) {
+                    console.log( 'onerror: ', e );
+                };
+
+                // ----------------------------------------------------
+                function getByID( id ){ return document.getElementById( id ); }
+
+                function socketSend( data ) {
+
+                    // console.info( 'socket.readyState: ['+socket.readyState+']' );
+                    // console.info( 'WebSocket.OPEN: ['+WebSocket.OPEN+']' );
+                    // console.info('send: data:', data);
+                    if (socket.readyState != WebSocket.OPEN){
+                        console.info( 'SOCKET IS NOT AVAILABLE' );
+                        return;
+                    }
+
+                    socket.send( typeof data === "object" ? JSON.stringify(data) : data);
+
+                }
+
+                // [CUSTOM EVENTS]
+
+                var Chat = {
+
+                    onNewChatMessage : function ( json_t ){
+
+                        chatBody.insertAdjacentHTML('beforeend', ''
+                            +'<div class="chat-msg-wrapper">'
+                            +'    <div class="chat-msg-date"> '+json_t.date+' </div>'
+                            +'    <div class="chat-msg-author"> '+json_t.author+' </div>'
+                            +'    <div class="chat-msg-data">'
+                            +( json_t.msg )
+                            +'    </div>'
+                            +'</div>'
+                        );
+
+                        this.scrollUp();
+
+                    },
+                    onNewChatClient : function ( json_t ){
+                        console.info( 'onNewChatClient: ', json_t );                    
+                    },
+
+
+
+
+
+                    scrollUp : function(){
+                        setTimeout( function(){
+                            try{ chatBody.scrollTo( 0, chatBody.scrollHeight ); }catch(e){ } }, 100);
+                        setTimeout( function(){
+                            try{ chatBody.scrollTop = chatBody.scrollHeight; }catch(e){ } }, 100);
+
+                    }
+
+                }
+
+                // ----------------------------------------------------
+
+            })();
+
+        });
+
+    </script>
+
+</head>
+<body>
+
+<!-- ========================================================== -->
+
+
+<div id="wrapper">
+
+    <div id="chat-wrapper">
+
+        <div id="chat-side-bar-wrapper">Hello, <%= userData.username%></div>
+        <div id="chat-side-body-wrapper">
+
+            <!--
+            <div class="chat-msg-wrapper">
+                <div class="chat-msg-date"> 23-23-23 23:23 </div>
+                <div class="chat-msg-author"> Author </div>
+                <div class="chat-msg-data">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                </div>
+            </div>
+            -->
+
+        </div>
+        <div id="chat-side-footer-wrapper">
+            <input type="text" id="input"/>
+        </div>
+        
+    </div>
+    
+</div>
+
+<!-- ========================================================== -->
+</body>
+</html>

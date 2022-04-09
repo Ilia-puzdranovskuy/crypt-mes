@@ -6,14 +6,70 @@ var CryptoJS    = require("crypto-js");
 var bodyParser  = require('body-parser');
 var genUUID     = require('generate-safe-id');
 var fs           = require("fs");
+var bodyParser = require('body-parser')
 
 const PORT = process.env.PORT || 3000;
-const INDEX = '/cli.html';
 
+//DATABASE
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const userScheme = new Schema({
+    username: String,
+    password: String,
+    userUUID: String
+});
+mongoose.connect("mongodb+srv://illia:1111@cluster0.zcsk7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true });
+
+const User = mongoose.model("User", userScheme);
+// const user = new User({
+//     username: "Bill",
+//     password: 41
+// });
+  
+// user.save(function(err){
+//     mongoose.disconnect();  // отключение от базы данных
+      
+//     if(err) return console.log(err);
+//     console.log("Сохранен объект", user);
+// });
+
+//SERVER
 const server = express()
   .use(bodyParser.json())
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .set('view engine', 'ejs')
+  .use(bodyParser.urlencoded({ extended: false }))
+  .use(express.static(__dirname + '/public'))
+  .get('/', function(req, res) {
+    res.render('auntification');
+  })
+  .post('/aunt', async function(req, res) {
+   console.log(req.body);
+   let findUser = await User.find({username:req.body.name,password:req.body.pas});
+   console.log(findUser)
+   if(findUser.length!=0){
+    res.render('index',{userData:findUser[0]});
+   }else{
+    res.redirect('/');
+   }
+
+  })
+    //Реєстрація
+  .get('/restration', function(req, res) {
+    res.render('creatAcaunt');
+  })
+  .post('/restr', function(req, res) {
+   // console.log(req.body);
+    const user = new User({
+            username: req.body.name,
+            password: req.body.pas
+        });
+    user.save();
+    res.redirect('/');
+   })
+ 
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+
 
 let sockets = {};
 
@@ -315,7 +371,7 @@ wss .on('connection', function(socket){
         },
 
         onNewChatMessage : function (json_t){
-            console.info( 'onNewChatMessage: ', json_t );
+            console.info( 'onNewChatMessage: ', json_t.msg.split('___')[1] );
 
             // console.info( sockets );
 
@@ -330,15 +386,15 @@ wss .on('connection', function(socket){
 
                     Chain.createBlock({
                         date    : ( new Date() ),
-                        author  : sock.UUID,
-                        msg     : json_t.msg,
+                        author  : json_t.msg.split('___')[1],
+                        msg     : json_t.msg.split('___')[0],
                     });
 
                     sock.send( JSON.stringify({
                         method  : 'onNewChatMessage',
                         date    : ( new Date() ),
-                        author  : sock.UUID,
-                        msg     : json_t.msg,
+                        author  : json_t.msg.split('___')[1],
+                        msg     : json_t.msg.split('___')[0],
                     }));
 
                 }else{

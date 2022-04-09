@@ -1,0 +1,56 @@
+
+body{
+    background: #F7F7F7;
+}
+
+#wrapper{
+    width: 900px; margin: 10px auto; box-sizing: border-box; box-shadow: 0 0 2px #777; padding: 10px;
+}
+
+#chat-wrapper{
+    box-sizing: border-box; padding: 0; background: #fff;
+}
+
+#chat-side-bar-wrapper{
+    vertical-align: top;
+    box-shadow: 0 0 2px #999; box-sizing: border-box; padding: 5px;
+    width: 220px; display: inline-block; height: 300px;
+}
+
+#chat-side-body-wrapper{
+    vertical-align: top;
+    box-shadow: 0 0 2px #999; box-sizing: border-box; padding: 5px;
+    width: 645px; display: inline-block; height: 300px;
+    margin-left: 10px; overflow-y: scroll;
+}
+
+#chat-side-footer-wrapper{
+    box-shadow: 0 0 2px #999; box-sizing: border-box; padding: 5px;
+    width: 100%; display: inline-block; margin-top: 10px;
+}
+
+#input{
+    width: 100%; box-sizing: border-box; padding: 5px;
+}
+
+
+.chat-msg-wrapper{
+    box-sizing: border-box; padding: 5px; background: #f7f7f7; font-size: 14px; 
+    margin-bottom: 10px;
+}
+
+.chat-msg-date, .chat-msg-author{
+    display: inline-block; vertical-align: top; box-sizing: border-box; padding: 5px; background: #333; color: #fff;
+}
+
+.chat-msg-data{
+    display: block; box-sizing: border-box; padding: 5px; 
+
+}
+
+.aunt_block{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: 40px auto;
+}
