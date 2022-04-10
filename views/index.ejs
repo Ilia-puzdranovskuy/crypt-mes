@@ -17,7 +17,13 @@
                 // ----------------------------------------------------
                 var chatBody = getByID('chat-side-body-wrapper');
                 var input = getByID('input');
-
+                function sleep(milliseconds) {
+                const date = Date.now();
+                let currentDate = null;
+                do {
+                    currentDate = Date.now();
+                } while (currentDate - date < milliseconds);
+                }
                 input.addEventListener('keyup', function(event){
 
                     if( event.keyCode == 13 ){
@@ -28,9 +34,8 @@
                         socketSend({
                             method : 'onNewChatMessage',
                             msg : data+'___'+'<%- userData.username%>'+'__'+curentChat,
-
+                            
                         });
-
                     }
 
                 });

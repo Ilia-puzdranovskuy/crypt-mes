@@ -64,7 +64,7 @@ const server = express()
     console.log(user)
     let findUserForChat = await User.findOne({username:req.body.name});
     console.log(findUserForChat)
-    if(findUserForChat!=null){
+    if(findUserForChat.length!=0){
         if(user.chats.find(element => element == findUserForChat.username)==undefined){
             user.chats.push(req.body.name)
             await user.save();
@@ -78,15 +78,21 @@ const server = express()
         res.status(204).send();
     }
     })
-  .post('/restr', function(req, res) {
-   // console.log(req.body);
-    const user = new User({
+  .post('/restr', async function(req, res) {
+    let ifuserValid = await User.findOne({username:req.body.name});
+    if(ifuserValid==null){
+        const user = new User({
             username: req.body.name,
             password: req.body.pas,
             chats:[]
         });
     user.save();
     res.redirect('/');
+    }else{
+        res.send('<h2>Цей користувач вже існує</h2><input type="button" onclick="history.back();" value="Назад"/>');
+    }
+   // console.log(req.body);
+   
    })
 
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
@@ -181,11 +187,23 @@ var Chain = {
 
     // --------------------------------------
     appendIfValid : function( block ){
-
+       
+        //console.log(parentBlock )  -parentBlock.data
+        // if(block.author==parentBlock.author&&block.msg==parentBlock.msg){
+        //     return
+        // }
         var chain_len       = this.blocks.length;
         var _isValidChain   = true;
         var parentBlock     = this.getLastBlock();
-
+        let time1 = new Date(JSON.parse(block.data).date).getTime();
+        let time2 = new Date(JSON.parse(parentBlock.data).date).getTime();
+        let blockD = JSON.parse(block.data);
+        let pBlock = JSON.parse(parentBlock.data);
+        console.log(time1-time2);
+        if(time1-time2<1000&&blockD.author==pBlock.author&&blockD.msg==pBlock.msg ){
+            return false;
+        }
+        //console.log(JSON.parse(parentBlock.data).date)
         // console.log( parentBlock );
         // console.log( "\n\n" );
         // console.log( block );
@@ -249,6 +267,7 @@ var Chain = {
         }
 
         if( _isValidChain ){
+            
 
             console.info( ' #BLOCKCHAIN: New Block added: ID: ['+block.index+'] HASH: ['+block.ownHash+']' );
 

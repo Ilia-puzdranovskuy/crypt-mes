@@ -26,19 +26,5 @@
         "ownHash": "3b72f3fe8a363a2fa1eb5b0035db98ac2e19cc5b8614459b73969399ea1c28c8",
         "timestamp": 1509905056996,
         "data": "{\"date\":\"2017-11-05T18:04:16.991Z\",\"author\":\"Ytees-yVcNlt2uIi5zVB1G5nBV8r17R-54GMMQ_W\",\"msg\":\"lalallala\"}"
-    },
-    {
-        "index": 4,
-        "parentHash": "3b72f3fe8a363a2fa1eb5b0035db98ac2e19cc5b8614459b73969399ea1c28c8",
-        "ownHash": "a3094532596753d79a845c13914a5452010a5894d34780aeb5351198a3899e52",
-        "timestamp": 1649550574866,
-        "data": "{\"date\":\"2022-04-10T00:29:34.865Z\",\"author\":\"1__Загальний чат\",\"msg\":\"111\"}"
-    },
-    {
-        "index": 5,
-        "parentHash": "a3094532596753d79a845c13914a5452010a5894d34780aeb5351198a3899e52",
-        "ownHash": "715aedd2cc7c9d10f3ee4d8ecf69793ede0d9586b182ef7774add793d3e66abe",
-        "timestamp": 1649595310807,
-        "data": "{\"date\":\"2022-04-10T12:55:10.806Z\",\"author\":\"123__1\",\"msg\":\"123123\"}"
     }
 ]
