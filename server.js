@@ -65,12 +65,15 @@ const server = express()
     let findUserForChat = await User.findOne({username:req.body.name});
     console.log(findUserForChat)
     if(findUserForChat.length!=0){
-        user.chats.push(req.body.name)
-        await user.save();
-        findUserForChat.chats.push(req.body.field_name)
-        await findUserForChat.save();
-        res.status(204).send();
-
+        if(user.chats.find(element => element == findUserForChat.username)==undefined){
+            user.chats.push(req.body.name)
+            await user.save();
+            findUserForChat.chats.push(req.body.field_name)
+            await findUserForChat.save();
+            res.status(204).send();
+        }else{
+            res.status(204).send();
+        }
     }else{
         res.status(204).send();
     }
@@ -365,7 +368,6 @@ Chain.createBlock({
 // return;
 
 */
-
 // /[BLOCKCHAIN]
 
 // --------------------------------------------------------------------

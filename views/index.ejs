@@ -101,7 +101,7 @@
 
                     onNewChatMessage : function ( json_t ){
                         console.log(json_t )
-                        if(curentChat==json_t.author.split("__")[1]||json_t.author.split("__")[1]==u){
+                        if(curentChat==json_t.author.split("__")[1]||json_t.author.split("__")[1]==u&&curentChat!='Загальний чат'){
                             chatBody.insertAdjacentHTML('beforeend', ''
                             +'<div class="chat-msg-wrapper">'
                             +'    <div class="chat-msg-date"> '+json_t.date+' </div>'
