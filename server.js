@@ -16,7 +16,8 @@ const Schema = mongoose.Schema;
 const userScheme = new Schema({
     username: String,
     password: String,
-    userUUID: String
+    userUUID: String,
+    chats:Array
 });
 mongoose.connect("mongodb+srv://illia:1111@cluster0.zcsk7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true });
 
@@ -51,22 +52,40 @@ const server = express()
    }else{
     res.redirect('/');
    }
-
+ 
   })
     //Реєстрація
   .get('/restration', function(req, res) {
     res.render('creatAcaunt');
   })
+  .post('/plusChat', async function(req, res) {
+    console.log(req.body);
+    let user = await User.findOne({username:req.body.field_name});
+    console.log(user)
+    let findUserForChat = await User.findOne({username:req.body.name});
+    console.log(findUserForChat)
+    if(findUserForChat.length!=0){
+        user.chats.push(req.body.name)
+        await user.save();
+        findUserForChat.chats.push(req.body.field_name)
+        await findUserForChat.save();
+        res.status(204).send();
+
+    }else{
+        res.status(204).send();
+    }
+    })
   .post('/restr', function(req, res) {
    // console.log(req.body);
     const user = new User({
             username: req.body.name,
-            password: req.body.pas
+            password: req.body.pas,
+            chats:[]
         });
     user.save();
     res.redirect('/');
    })
- 
+
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
@@ -271,7 +290,7 @@ var Chain = {
         return this.appendIfValid( block )
 
     },
-
+    
     // --------------------------------------
     genesisBlock : function(){
 
@@ -366,7 +385,18 @@ wss .on('connection', function(socket){
     // [CHAT - EVENTS - METHODS]
     var _Chat = {
         onChatInit : function (json_t){
-            console.info( 'onChatInit: ', json_t );
+            Chain.getAllBlocks().forEach( function( block ){
+
+                var data = JSON.parse( block.data );
+        
+                socket.send( JSON.stringify({
+                    method  : 'onNewChatMessage',
+                    date    : data.date,
+                    author  : data.author,
+                    msg     : data.msg
+                }));
+        
+            })
             
         },
 
@@ -428,7 +458,7 @@ wss .on('connection', function(socket){
 
     // ------------------------------
     socket.on('message', function(data){
-
+        console.log("onm")
         try{
 
             var json_t = JSON.parse( data );

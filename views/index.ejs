@@ -8,8 +8,10 @@
     <script type="text/javascript" src="./json2.js"></script>
 
     <script type="text/javascript">
+        
         window.addEventListener('load', function(){
-
+            let curentChat = 'Загальний чат';
+            let u ='<%= userData.username%>';     
             (function(){
     
                 // ----------------------------------------------------
@@ -25,7 +27,7 @@
 
                         socketSend({
                             method : 'onNewChatMessage',
-                            msg : data+'___'+'<%- userData.username%>',
+                            msg : data+'___'+'<%- userData.username%>'+'__'+curentChat,
 
                         });
 
@@ -39,22 +41,22 @@
                 var socket = new WebSocket( HOST);
 
                 socket.onopen = function (e) {
-                    console.log( 'socket.onopen: [true]' );
+                    //console.log( 'socket.onopen: [true]' );
 
-                    socketSend({
-                        method : 'onChatInit',
+                    // socketSend({
+                    //     method : 'onChatInit',
 
-                    });
+                    // });
 
                 };
 
                 socket.onmessage = function (e) {
 
                     // console.log( 'onmessage: origin :', e.origin );
-                    console.log( 'onmessage: data   :', e.data );
+                    //console.log( 'onmessage: data   :', e.data );
 
                     var json_t = JSON.parse( e.data );
-                    console.log( 'json_t:', json_t );
+                    //console.log( 'json_t:', json_t );
 
                     if( typeof json_t.method !== "undefined" ){
                         if( typeof Chat[ json_t.method ] === "function" ){
@@ -66,14 +68,14 @@
                 };
 
                 socket.onclose = function (e) {
-                    console.log( 'onclose: wasClean:', e.wasClean );
-                    console.log( 'onclose: code:', e.code );
-                    console.log( 'onclose: reason:', e.reason );
+                    //console.log( 'onclose: wasClean:', e.wasClean );
+                    //console.log( 'onclose: code:', e.code );
+                   // console.log( 'onclose: reason:', e.reason );
 
                 };
 
                 socket.onerror = function (e) {
-                    console.log( 'onerror: ', e );
+                    //console.log( 'onerror: ', e );
                 };
 
                 // ----------------------------------------------------
@@ -98,11 +100,12 @@
                 var Chat = {
 
                     onNewChatMessage : function ( json_t ){
-
-                        chatBody.insertAdjacentHTML('beforeend', ''
+                        console.log(json_t )
+                        if(curentChat==json_t.author.split("__")[1]||json_t.author.split("__")[1]==u){
+                            chatBody.insertAdjacentHTML('beforeend', ''
                             +'<div class="chat-msg-wrapper">'
                             +'    <div class="chat-msg-date"> '+json_t.date+' </div>'
-                            +'    <div class="chat-msg-author"> '+json_t.author+' </div>'
+                            +'    <div class="chat-msg-author"> '+json_t.author.split("__")[0]+' </div>'
                             +'    <div class="chat-msg-data">'
                             +( json_t.msg )
                             +'    </div>'
@@ -110,6 +113,8 @@
                         );
 
                         this.scrollUp();
+                        }
+                       
 
                     },
                     onNewChatClient : function ( json_t ){
@@ -129,12 +134,34 @@
                     }
 
                 }
+                
+                let chats = document.getElementById('chats');
+                chats.addEventListener("click",openChat);
+                function openChat(e){
+                    curentChat = e.target.innerText;
+                    console.log(curentChat);
+                    chatBody.innerHTML = ''
+                    socketSend({
+                        method : 'onChatInit',
 
+                    });
+
+                }
                 // ----------------------------------------------------
 
             })();
 
+            // let chats = document.getElementById('chats');
+            // chats.addEventListener("click",openChat);
+            // function openChat(e){
+            //     curentChat = e.target.innerText;
+            //     console.log(curentChat);
+            // }
+
         });
+
+        
+        
 
     </script>
 
@@ -148,7 +175,23 @@
 
     <div id="chat-wrapper">
 
-        <div id="chat-side-bar-wrapper">Hello, <%= userData.username%></div>
+        <div id="chat-side-bar-wrapper">
+            <div>Hello, <%= userData.username%></div>
+            <ul id="chats">
+                <li>Загальний чат</li>
+                <% for(var i=0; i<userData.chats.length; i++) {%>
+                   <li><%= userData.chats[i] %></li>
+                <% } %>
+            </ul>
+            <div>
+                 <form action="/plusChat" method="POST">
+                     <span>Додати чат</span>
+                     <input type="text" name="name">
+                     <input type="hidden" name="field_name" value='<%= userData.username%>' />
+                     <input type="submit" value="Додати">
+                </form>
+                </div>
+        </div>
         <div id="chat-side-body-wrapper">
 
             <!--
