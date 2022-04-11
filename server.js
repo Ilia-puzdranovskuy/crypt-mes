@@ -64,7 +64,7 @@ const server = express()
     console.log(user)
     let findUserForChat = await User.findOne({username:req.body.name});
     console.log(findUserForChat)
-    if(findUserForChat.length!=0){
+    if(findUserForChat!=null){
         if(user.chats.find(element => element == findUserForChat.username)==undefined){
             user.chats.push(req.body.name)
             await user.save();

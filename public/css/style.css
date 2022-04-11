@@ -4,29 +4,52 @@ body{
 }
 
 #wrapper{
+    background-color: #4527a0 ;
     width: 900px; margin: 10px auto; box-sizing: border-box; box-shadow: 0 0 2px #777; padding: 10px;
 }
 
 #chat-wrapper{
+    display: flex;
+    flex-direction: row;
     box-sizing: border-box; padding: 0; background: #fff;
 }
 
 #chat-side-bar-wrapper{
     vertical-align: top;
     box-shadow: 0 0 2px #999; box-sizing: border-box; padding: 5px;
-    width: 220px; display: inline-block; height: 300px;
+    width: 100%; display: inline-block; height: 100%;
+    
+}
+.chats{
+    overflow-y: scroll;
+    height: 377px;
+}
+.plus-btn{
+   position: relative;
+    margin: 0 10px;
+}
+.i-con{
+    position: absolute;
+    right: 6px;
+    top: 0px;
 }
 
+
+.userN{
+    color: #673ab7 ;
+    text-align: center;
+    font-size: large;
+}
 #chat-side-body-wrapper{
     vertical-align: top;
     box-shadow: 0 0 2px #999; box-sizing: border-box; padding: 5px;
-    width: 645px; display: inline-block; height: 300px;
+    width: 645px; display: inline-block; height: 400px;
     margin-left: 10px; overflow-y: scroll;
 }
 
 #chat-side-footer-wrapper{
     box-shadow: 0 0 2px #999; box-sizing: border-box; padding: 5px;
-    width: 100%; display: inline-block; margin-top: 10px;
+    width: 645px; display: inline-block; margin-top: 10px;
 }
 
 #input{
@@ -40,7 +63,7 @@ body{
 }
 
 .chat-msg-date, .chat-msg-author{
-    display: inline-block; vertical-align: top; box-sizing: border-box; padding: 5px; background: #333; color: #fff;
+    display: inline-block; vertical-align: top; box-sizing: border-box; padding: 5px; background: #4527a0; color: #fff;
 }
 
 .chat-msg-data{
@@ -53,4 +76,17 @@ body{
     flex-direction: column;
     width: 400px;
     margin: 40px auto;
+}
+
+.aunt_block{
+    background-color: #673ab7;
+    padding: 5mm;
+    border: 1mm solid #4527a0;
+}
+
+.bord{
+    border: 2px solid #4527a0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

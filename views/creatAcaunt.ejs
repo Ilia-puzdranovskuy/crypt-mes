@@ -1,17 +1,23 @@
 <head>
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 </head>
-<body>
+<body class="deep-purple darken-1">
     <div class="aunt_block">
         <form id="my_captcha_form" action="/restr" method="post">
             <label for="name">Ведіть ім'я </label>
-            <input required id="name" type="text" name="name">
+            <input placeholder='Нікнейм' required id="name" type="text" name="name">
             <label for="pas">Пароль </label>
-            <input required id="pas" type="password" name="pas">
+            <input placeholder='Пароль' required id="pas" type="password" name="pas">
             <div  class="g-recaptcha" data-callback="imNotARobot" data-sitekey="6Lfr_WAfAAAAAEjLFki03jrkBtKpHYPgVr4ia4-h" ></div>
-            <input type="submit" value="Зареєструватись">
+            <button id=" btn" class=" btn waves-effect waves-light" type="submit">Зареєструватись</button>
         </form>
     </div>
     <script type="text/javascript">
@@ -28,4 +34,5 @@
         });
      
     </script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>

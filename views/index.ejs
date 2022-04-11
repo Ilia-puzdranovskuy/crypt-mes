@@ -5,6 +5,12 @@
     <title>BlockChain - Cli</title>
     <meta charset="utf-8"/>
     <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script type="text/javascript" src="./json2.js"></script>
 
     <script type="text/javascript">
@@ -171,7 +177,7 @@
     </script>
 
 </head>
-<body>
+<body class="deep-purple darken-1">
 
 <!-- ========================================================== -->
 
@@ -180,45 +186,52 @@
 
     <div id="chat-wrapper">
 
-        <div id="chat-side-bar-wrapper">
-            <div>Hello, <%= userData.username%></div>
-            <ul id="chats">
-                <li>Загальний чат</li>
-                <% for(var i=0; i<userData.chats.length; i++) {%>
-                   <li><%= userData.chats[i] %></li>
-                <% } %>
-            </ul>
-            <div>
-                 <form action="/plusChat" method="POST">
-                     <span>Додати чат</span>
+        <div id="chat-side-bar-wrapper" class="">
+            <div class="userN">Вітаю <%= userData.username%></div>
+            <div class="chats">
+                
+                <ul id="chats" class="collection">
+                    <li class="collection-item">Загальний чат</li>
+                    <% for(var i=0; i<userData.chats.length; i++) {%>
+                       <li class="collection-item"><%= userData.chats[i] %></li>
+                    <% } %>
+                </ul>
+            </div>
+            
+            <div >
+                 <form class="bord" action="/plusChat" method="POST">
                      <input type="text" name="name">
                      <input type="hidden" name="field_name" value='<%= userData.username%>' />
-                     <input type="submit" value="Додати">
+                     <button  class=" plus-btn btn  waves-effect waves-light" type="submit" onclick="setTimeout(() => {location.reload()}, 1000);"><i class="material-icons i-con">add</i></button>
                 </form>
-                </div>
-        </div>
-        <div id="chat-side-body-wrapper">
-
-            <!--
-            <div class="chat-msg-wrapper">
-                <div class="chat-msg-date"> 23-23-23 23:23 </div>
-                <div class="chat-msg-author"> Author </div>
-                <div class="chat-msg-data">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                </div>
             </div>
-            -->
+        </div>
+        <div>
+            <div id="chat-side-body-wrapper" class="deep-purple  lighten-3">
 
+                <!--
+                <div class="chat-msg-wrapper">
+                    <div class="chat-msg-date"> 23-23-23 23:23 </div>
+                    <div class="chat-msg-author"> Author </div>
+                    <div class="chat-msg-data">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    </div>
+                </div>
+                -->
+    
+            </div>
+            <div id="chat-side-footer-wrapper">
+                <input placeholder="Введіть ваше повідомлення" type="text" id="input"/>
+            </div>
+            
         </div>
-        <div id="chat-side-footer-wrapper">
-            <input type="text" id="input"/>
-        </div>
-        
+
     </div>
     
 </div>
 
 <!-- ========================================================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
