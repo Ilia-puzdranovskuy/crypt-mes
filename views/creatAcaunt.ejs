@@ -12,6 +12,8 @@
 <body class="deep-purple darken-1">
     <div class="aunt_block">
         <form id="my_captcha_form" action="/restr" method="post">
+            <label for="phone">Ведіть номер телефону(В форматі 123-456-7890) </label>
+            <input placeholder='123-456-7890' type="tel" id="phone" name="phone"pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"required>
             <label for="name">Ведіть ім'я </label>
             <input placeholder='Нікнейм' required id="name" type="text" name="name">
             <label for="pas">Пароль </label>

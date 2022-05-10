@@ -112,7 +112,9 @@
 
                     onNewChatMessage : function ( json_t ){
                         console.log(json_t )
-                        if(curentChat==json_t.author.split("__")[1]||json_t.author.split("__")[1]==u&&curentChat!='Загальний чат'){
+                        console.log(curentChat+" "+"-------")
+                        if(curentChat==json_t.author.split("__")[0]||json_t.author.split("__")[0]==u){
+                            if((curentChat==json_t.author.split("__")[1]&&json_t.author.split("__")[0]==u)||(json_t.author.split("__")[1]==u&&curentChat!='Загальний чат')){
                             chatBody.insertAdjacentHTML('beforeend', ''
                             +'<div class="chat-msg-wrapper">'
                             +'    <div class="chat-msg-date"> '+json_t.date+' </div>'
@@ -122,6 +124,8 @@
                             +'    </div>'
                             +'</div>'
                         );
+                        }
+                        
 
                         this.scrollUp();
                         }

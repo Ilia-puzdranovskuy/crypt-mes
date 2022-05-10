@@ -17,7 +17,8 @@ const userScheme = new Schema({
     username: String,
     password: String,
     userUUID: String,
-    chats:Array
+    chats:Array,
+    phone:String
 });
 mongoose.connect("mongodb+srv://illia:1111@cluster0.zcsk7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true });
 
@@ -80,16 +81,23 @@ const server = express()
     })
   .post('/restr', async function(req, res) {
     let ifuserValid = await User.findOne({username:req.body.name});
+    let ifphoneValid = await User.findOne({phone:req.body.phone});
     if(ifuserValid==null){
-        const user = new User({
-            username: req.body.name,
-            password: req.body.pas,
-            chats:[]
-        });
-    user.save();
-    res.redirect('/');
+        if(ifphoneValid==null){
+            const user = new User({
+                username: req.body.name,
+                password: req.body.pas,
+                phone:req.body.phone,
+                chats:[]
+            });
+            user.save();
+            res.redirect('/');
+        }else{
+            res.send('<h2>Цей номер вже зареєстрований</h2><input type="button" onclick="history.back();" value="Назад"/>');
+        }
+
     }else{
-        res.send('<h2>Цей користувач вже існує</h2><input type="button" onclick="history.back();" value="Назад"/>');
+        res.send('<h2>Цей користувач вже існує</h2><input type="button" onclick="history.back();" value="Назад"/>'); 
     }
    // console.log(req.body);
    
