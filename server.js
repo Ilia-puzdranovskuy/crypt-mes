@@ -99,7 +99,7 @@ const server = express()
     }else{
         res.send('<h2>Цей користувач вже існує</h2><input type="button" onclick="history.back();" value="Назад"/>'); 
     }
-   // console.log(req.body);
+   // console.log(req.body)11;
    
    })
 
